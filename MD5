@@ -1,0 +1,13 @@
+fef9460d4f77b1dc7649d85b818e94f6 *DESCRIPTION
+e66d7e10a1ad72c32a4eb007441ddecf *NAMESPACE
+52483fafe65ceb1615aafb4a927e9596 *R/class.R
+37064b9e1674e710f6e0552fbfb0abcc *R/methods.R
+eca760b84e5051fe97a46dd1ce24bb12 *R/privatefun.R
+e157ed2c5eca71577dd49c3eb8016680 *inst/CITATION
+dee080727692f5fa17538b1d858be79e *man/Counts-class.Rd
+8ae0bbfbd02571ff1f406081f7987335 *man/accessors.Rd
+aa9e51dc6ac6e2d86b76aa8dc1acbe62 *man/computePosterior.Rd
+f31ac4433b8f195b1499f949623dca31 *man/dupiR-package.Rd
+6998e148bfd0e568d8c5244a3a53305c *man/getPosteriorParam.Rd
+809f7706ae346a2f387982e5a6d29a76 *man/newCounts.Rd
+7e6fcc441648871e8da705d319fe317f *man/plotPosterior.Rd
