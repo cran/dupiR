@@ -4,23 +4,41 @@
 \alias{computePosterior,Counts-method}
 \alias{computePosterior}
 
-\title{Compute the posterior density of the population size using a discrete uniform prior and binomial likelihood (DUP) or a Gamma prior and a Poisson likelihood (GP)}
+\title{Compute the posterior probability distribution of the population size}
 
 \description{
-Compute the posterior density of the population size using a discrete uniform prior and binomial likelihood (DUP) or a Gamma prior and a Poisson likelihood (GP)
+Compute the posterior probability distribution of the population size using a discrete uniform prior and a binomial likelihood (DUP method). When applicable, an approximation using a Gamma prior and a Poisson likelihood is used instead (GP method, see Clough et al).
+}
+
+\usage{computePosterior(object, n1, n2, replacement = FALSE, alg = "DUP")}
+
+\arguments{
+  \item{object}{An object of class 'Counts'}
+  \item{n1}{Left endpoint of the prior support interval (Optional). If not provided and total counts are not zero, computed using the maximum likelihood estimate (mle) of the population size as 0.5 * mle}
+  \item{n2}{Right endpoint of the prior support interval (Optional). If not provided and total counts are not zero, computed using the maximum likelihood estimate (mle) of the population size as 2 * mle}
+  \item{replacement}{Whether sampling has been performed with replacement. Default to FALSE.}
+  \item{alg}{Algorithm to be used to perform computations. Default to DUP.}
 }
 
 \section{Methods}{
 \describe{
 
-\item{\code{signature(object = "Counts")}}{
-an object of class Counts.
-%%  ~~describe this method here~~
-}
+\code{signature(object = "Counts")}}{
+an object of class \code{Counts}.
 }}
 
+\section{Value}{
+Returns an object of class \code{Counts}.
+}
+
+\references{
+Comoglio F, Fracchia L and Rinaldi M (2013) Bayesian inference from count data using discrete uniform priors. PLOS ONE, to appear
+
+Clough HE et al. (2005) Quantifying Uncertainty Associated with Microbial Count Data: A Bayesian Approach. Biometrics 61: 610-616
+}
+
 \seealso{
-\code{\link{Counts-class}, \link{plotPosterior}}
+\code{\link{Counts}, \link{plotPosterior}}
 }
 
 \author{
@@ -36,7 +54,7 @@ K.dup <- computePosterior(K)
 #using custom prior support (DUP)
 K.cust <- computePosterior(K, n1 = 0, n2 = 1e3)
 
-#using a Gamma prior (GP-method)
+#using a Gamma prior (GP method)
 K.gp <- computePosterior(K, alg = 'GP')
 
 #plot the results (compare DUP with GP)

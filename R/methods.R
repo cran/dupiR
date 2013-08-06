@@ -1,5 +1,5 @@
 ##Wrote by Federico Comoglio (D-BSSE, ETH Zurich) and Maurizio Rinaldi (Dipartimento di Scienza del Farmaco, University Piemonte Orientale 'A. Avogadro') 
-##Last update: 25/05/2013
+##Last update: 06/08/2013
 
 ########
 #Methods
@@ -12,11 +12,12 @@ setMethod(f = 'show',
 			cat('An object of class \'Counts\'', '\n')
 				cat('Counts: ', object@counts, '\n')
 			cat('from Fractions: ', object@fractions, '\n')
-			cat('DUP interval: ', paste('[', object@n1, ',', object@n2, ']', sep = ''), '\n')
+			cat('Prior support: ', paste('[', object@n1, ',', object@n2, ']', sep = ''), '\n')
+			if(length(object@posterior) > 0) cat('Posterior:', head(object@posterior, 3), '...', tail(object@posterior, 3), '\n')
 			if(length(object@map) > 0) cat('MAP of n: ', object@map, '\n')
-			if(length(object@map.p) > 0) cat('MAP probability: ', object@map.p, '\n')
+			if(length(object@map.p) > 0) cat('Maximum posterior probability: ', object@map.p, '\n')
 			if(length(object@qlow) > 0 && length(object@qup) > 0) 
-				cat('Confidence interval: ',  paste('[', object@qlow, ',', object@qup, ']', sep = ''), '\n')
+				cat('Credible interval at ', 100  * signif(object@qup.cum - object@qlow.cum, 3), '% level: ',  paste('[', object@qlow, ',', object@qup, ']', sep = ''), '\n', sep = '')
 			cat('***')
 		}
 )
@@ -27,9 +28,9 @@ setMethod(f = 'summary',
 			cat('An object of class \'Counts\'', '\n')
 			cat('Counts: ', object@counts, '\n')
 			cat('from Fractions: ', object@fractions, '\n')
-			cat('DUP interval: ', paste('[', object@n1, ',', object@n2, ']', sep = ''), '\n')
+			cat('Prior support: ', paste('[', object@n1, ',', object@n2, ']', sep = ''), '\n')
 			tmp <- ifelse(!identical(object@posterior, numeric(0)), TRUE, FALSE)
-			cat('Computed posterior density: ', tmp, '\n')	
+			cat('Computed posterior probability distribution: ', tmp, '\n')	
 		}
 )
 
@@ -79,7 +80,7 @@ setReplaceMethod(f = 'setFractions',
 		}
 )
 
-setGeneric( name = 'computePosterior', def = function(object, ...) standardGeneric ('computePosterior') )
+setGeneric( name = 'computePosterior', def = function(object, n1, n2, replacement = FALSE, alg = 'DUP') standardGeneric ('computePosterior') )
 setMethod(f = 'computePosterior',
 		signature = 'Counts',
 		definition = function(object, n1, n2, replacement = FALSE, alg = 'DUP') {
@@ -99,7 +100,7 @@ setMethod(f = 'computePosterior',
 			object@n2 <- n2
 			switch(alg, 'DUP' = {
 				if(R < 1/32) {	#compute with replacement, use Clough
-					message("Notice: Effect of replacement negligible, used faster algorithm.")
+					message("Notice: Effect of replacement negligible, used faster algorithm (Gamma approximation).")
 					posterior <- Clough(object, n1, n2, b = 1e-6)
 					object@posterior <- posterior
 					object@gamma <- TRUE
@@ -127,10 +128,10 @@ setMethod(f = 'computePosterior',
 				})
 })
 
-setGeneric( name = 'getPosteriorParam', def = function(object, ...) standardGeneric ('getPosteriorParam') )
+setGeneric( name = 'getPosteriorParam', def = function(object, low = 0.025, up = 0.975, ...) standardGeneric ('getPosteriorParam') )
 setMethod(f = 'getPosteriorParam',
 		signature = 'Counts',
-		definition = function(object, low = 0.025, up = 0.975) {
+		definition = function(object, low = 0.025, up = 0.975, ...) {
 			k.vec <- object@counts
 			r.vec <- object@fractions
 			K <- sum(k.vec)
@@ -157,7 +158,6 @@ setMethod(f = 'getPosteriorParam',
 					qlow.cum <- ecdf[qlow.idx]
 					qlow <- s[qlow.idx]
 				}	
-				print(is.integer(qlow.idx))
 				tmp <- which((ecdf >= up) == TRUE)
 				qup.idx <- tmp[1]
 				qup.p <- posterior[qup.idx]
@@ -204,10 +204,10 @@ setMethod(f = 'getPosteriorParam',
 		}
 )
 
-setGeneric( name = 'plotPosterior', def = function(object, ...) standardGeneric ('plotPosterior') )
+setGeneric( name = 'plotPosterior', def = function(object, low = 0.025, up = 0.975, xlab, step, ...) standardGeneric ('plotPosterior') )
 setMethod(f = 'plotPosterior',
 		signature = 'Counts',
-		definition = function(object, low = 0.025, up = 0.975, ...) {
+		definition = function(object, low = 0.025, up = 0.975, xlab, step, ...) {
 			require(plotrix)	#dependency
 			stopifnot( is(object, 'Counts') )
 			k.vec <- object@counts
@@ -220,12 +220,18 @@ setMethod(f = 'plotPosterior',
 			s <- n1 : n2
 			a <- 1
 			b <- 1e-6
-			main.text <- paste('Posterior density \n ', 'K=', sum(k.vec), '; ', 'R=', sum(r.vec), sep = '')
+			main.text <- paste('Posterior probability distribution \n ', 'K=', sum(k.vec), '; ', 'R=', sum(r.vec), sep = '')
 			if(!is.null(posterior)) {
 				l <- length(s)
 				plot( posterior, xaxt = 'n', pch = 19, cex = 0.5, 
-			      		main = main.text, xlab = 'n', ylab = 'density', ylim = c(0, 1.05 * max(posterior)), ...)
-				axis( side = 1, at = seq(1, l, by = round(l / 15)), labels = seq(n1, n2, by = round(l / 15)) )
+			      		main = main.text, xlab = ifelse(missing(xlab), 'n', xlab), ylab = 'density', ylim = c(0, 1.05 * max(posterior)), ...)
+			    if(missing(step)) {
+					axis( side = 1, at = seq(1, l, by = round(l / 15)), labels = seq(n1, n2, by = round(l / 15)) )
+				}
+				else {
+					at <- which(s %% step == 0)
+					axis( side = 1, at = at, labels = s[at] )
+				}
 				abline(v = tmp@map.idx, lwd = 1.5, col = 'blue3')
 				lines(c(tmp@qlow.idx, tmp@qlow.idx), c(0, tmp@qlow.p), lwd = 1.5, lty = 2, col = 'gray50')
 				lines(c(tmp@qup.idx, tmp@qup.idx), c(0, tmp@qup.p), lwd = 1.5, lty = 2, col = 'gray50')
@@ -233,10 +239,17 @@ setMethod(f = 'plotPosterior',
 			}
 			else {
 				l <- n2 - n1 + 1
+				x <- NULL
 				curve(dgamma(x, a + sum(k.vec), b + sum(r.vec)), from = n1, to = n2, 
 					xaxt = 'n', pch = 19, cex = 0.5,
-					main = main.text, xlab = 'n', ylab = 'density', ...)
-				axis( side = 1, at = seq(n1, n2, by = round(l / 15)), labels = seq(n1, n2, by = round(l / 15)) )
+					main = main.text, xlab = ifelse(missing(xlab), 'n', xlab), ylab = 'density', ...)
+				if(missing(step)) {
+					axis( side = 1, at = seq(1, l, by = round(l / 15)), labels = seq(n1, n2, by = round(l / 15)) )
+				}
+				else {
+					at <- which(s %% step == 0)
+					axis( side = 1, at = at, labels = s[at] )
+				}
 				abline(v = tmp@map, lwd = 1.5, col = 'blue3')
 				lines(c(tmp@qlow, tmp@qlow), c(0, tmp@qlow.p), lwd = 1.5, lty = 2, col = 'gray50')
 				lines(c(tmp@qup, tmp@qup), c(0, tmp@qup.p), lwd = 1.5, lty = 2, col = 'gray50')

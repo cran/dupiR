@@ -3,18 +3,14 @@
 \alias{getCounts-methods}
 \alias{getCounts,Counts-method}
 \alias{getCounts}
-\alias{getFractionss-methods}
+\alias{getFractions-methods}
 \alias{getFractions,Counts-method}
 \alias{getFractions}
 
 \title{Accessors for the 'counts' and 'fractions' slots of a Counts object.}
 
 \description{
-Each measurement consists of an integer count and a matched sampling fraction. The counts and fractions slots contain the results of an arbitrary set of measurements.
-
-The counts slot is am integer vector of counts 
-	
-The fractions slot is a numeric vector of matched sampling fractions	
+Each measurement consists of an integer count and a corresponding sampling fraction. These values are required to defined an object of class \code{Counts} and are subsequently stored in the counts and fractions slots. The counts slot is an integer vector of counts. The fractions slot is a numeric vector of matched sampling fractions.	
 }
 
 \section{Methods}{
@@ -27,7 +23,7 @@ an object of class Counts.
 }}
 
 \seealso{
-\code{\link{Counts-class}}
+\code{\link{Counts}}
 }
 
 \author{

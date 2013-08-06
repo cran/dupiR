@@ -4,23 +4,30 @@
 \alias{getPosteriorParam,Counts-method}
 \alias{getPosteriorParam}
 
-\title{Obtain statistical parameters from the posterior density.}
+\title{Compute posterior probability distribution parameters}
 
-\description{
-Obtain statistical parameters from the posterior density.
+\description{Obtain statistical parameters from the posterior probability distribution. Particularly, this function computes credible intervals at a given confidence level (default to 95\%).}
+
+\usage{getPosteriorParam(object, low = 0.025, up = 0.975, ...)}
+
+\arguments{
+  \item{object}{An object of class 'Counts'}
+  \item{low}{The left tail posterior probability}
+  \item{up}{1 - the right tail posterior probability}
+  \item{...}{Additional arguments, for compatibility with \code{plotPosterior}}
 }
 
 \section{Methods}{
 \describe{
 
-\item{\code{signature(object = "Counts")}}{
-an object of class Counts.
-%%  ~~describe this method here~~
-}
+\code{signature(object = "Counts")}}{
+an object of class \code{Counts}.
 }}
 
+\value{An object of class Counts.}
+
 \seealso{
-\code{\link{Counts-class}, \link{plotPosterior}}
+\code{\link{Counts}, \link{plotPosterior}}
 }
 
 \author{
@@ -38,5 +45,3 @@ getPosteriorParam(K.dup)
 }   
 
 \keyword{methods}
-
-   

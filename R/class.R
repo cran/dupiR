@@ -1,5 +1,5 @@
 ##Wrote by Federico Comoglio (D-BSSE, ETH Zurich) and Maurizio Rinaldi (Dipartimento di Scienza del Farmaco, University Piemonte Orientale 'A. Avogadro') 
-##Last update: 27/05/2013
+##Last update: 06/08/2013
 
 ###########
 #Class def.
@@ -17,6 +17,8 @@ setClass(Class = 'Counts', representation(counts = 'integer', fractions = 'numer
 			}
 			if( !all(object@fractions <= 1 & object@fractions > 0) )
 				stop('Fractions not in (0,1]')
+			if( any(object@counts < 0) )
+				stop('Counts are negative')
 			return( TRUE )
 		}
 )
@@ -25,11 +27,13 @@ setMethod(f = 'initialize',
 		signature = 'Counts', 
 		definition = function(.Object, counts, fractions) {
 			if( !missing(counts) ) {
-				.Object@counts <-  as.integer(counts)
+				if( sum(counts - as.integer(counts)) != 0 )
+					warning('non-integer counts have been converted to integers (floor)')
+			.Object@counts <-  as.integer(counts)
 			if(!missing(fractions)) {
 				.Object@fractions <- fractions
 				.Object@X <- prod( 1 - fractions )
-				mle <- round( mean(counts) * 1 / mean(fractions) )
+				mle <- round( sum(counts) / sum(fractions) )
 				n1 <- round(0.5 * mle)
 				n2 <- ifelse( 2 * mle == 0, round(1 / min(fractions)), 2 * mle )
 				.Object@n1 <- n1

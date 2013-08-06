@@ -6,23 +6,34 @@
 \alias{plot-method}
 \alias{plot,Counts-method}
 
-\title{Plot posterior densities}
+\title{Plot posterior probability distributions}
 
 \description{
-Plot posterior densities
+Produces publication-level plots of posterior probability distributions computed using \code{computePosterior}. A data summary, credible intervals at a given confidence level, maximum a posteriori (and more) are indicated.
+}
+
+\usage{plotPosterior(object, low = 0.025, up = 0.975, xlab, step, ...)}
+
+\arguments{
+  \item{object}{An object of class 'Counts'}
+  \item{low}{The left tail posterior probability. Default to 0.025.}
+  \item{up}{1 - the right tail posterior probability. Default to 0.975.}
+  \item{xlab}{The x-axis label. If not provided, default to 'n'.}
+  \item{step}{An integer defining the increment for x-axis labels (i.e. the separation between two consecutive tick marks).}
+  \item{...}{Additional arguments to be passed to the \code{plot} function}
 }
 
 \section{Methods}{
-\describe{
-
-\item{\code{signature(object = "Counts")}}{
+\describe{\code{signature(object = "Counts")}{
 an object of class Counts.
 %%  ~~describe this method here~~
 }
 }}
 
+\value{Called for its effects.}
+
 \seealso{
-\code{\link{Counts-class}}
+\code{\link{Counts-class}, \link{computePosterior}}
 }
 
 \author{
