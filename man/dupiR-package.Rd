@@ -9,8 +9,8 @@
 \tabular{ll}{
 Package: \tab dupiR\cr
 Type: \tab Package\cr
-Version: \tab 1.1\cr
-Date: \tab 2013-08-06\cr
+Version: \tab 1.2\cr
+Date: \tab 2014-12-29\cr
 License: \tab GPL-2\cr
 }
 }
@@ -18,7 +18,7 @@ License: \tab GPL-2\cr
 
 (1) Department of Biosystems Science and Engineering (D-BSSE), ETH Zurich, Switzerland
 
-(2) Dipartimento di Scienze del Farmaco, Universita' del Piemonte Orientale 'A. Avogadro'
+(2) Dipartimento di Scienze del Farmaco, Universita' del Piemonte Orientale
 
 Maintainer: Federico Comoglio
 
@@ -26,6 +26,6 @@ Maintainer: Federico Comoglio
 }
 
 \references{
-Comoglio F, Fracchia L and Rinaldi M (2013) Bayesian inference from count data using discrete uniform priors. PLOS ONE, to appear
+Comoglio F, Fracchia L and Rinaldi M (2013) Bayesian inference from count data using discrete uniform priors. PLOS ONE, 8(10):e74388. doi:10.1371/journal.pone.0074388
 }
 \keyword{package}

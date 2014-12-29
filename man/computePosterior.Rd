@@ -10,13 +10,14 @@
 Compute the posterior probability distribution of the population size using a discrete uniform prior and a binomial likelihood (DUP method). When applicable, an approximation using a Gamma prior and a Poisson likelihood is used instead (GP method, see Clough et al).
 }
 
-\usage{computePosterior(object, n1, n2, replacement = FALSE, alg = "DUP")}
+\usage{computePosterior(object, n1, n2, replacement = FALSE, b, alg = "DUP")}
 
 \arguments{
   \item{object}{An object of class 'Counts'}
   \item{n1}{Left endpoint of the prior support interval (Optional). If not provided and total counts are not zero, computed using the maximum likelihood estimate (mle) of the population size as 0.5 * mle}
   \item{n2}{Right endpoint of the prior support interval (Optional). If not provided and total counts are not zero, computed using the maximum likelihood estimate (mle) of the population size as 2 * mle}
   \item{replacement}{Whether sampling has been performed with replacement. Default to FALSE.}
+  \item{b}{Prior rate parameter of the gamma distribution used to compute the posterior with Clough. Default is 1e-10.}
   \item{alg}{Algorithm to be used to perform computations. Default to DUP.}
 }
 

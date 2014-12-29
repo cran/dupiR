@@ -4,14 +4,13 @@ citEntry(entry="article",
 					as.person("Letizia Fracchia"),
 					as.person("Maurizio Rinaldi")),
          year = 2013,
-         journal = "submitted",
-         volume = "X",
-         pages = "XXX-XXX",
-         doi = "",
-         url = "",
+         journal = "PLoS ONE",
+         volume = "8(10)",
+         pages = "e74388",
+         doi = "10.1371/journal.pone.0074388",
+         url = "https://github.com/FedericoComoglio/dupiR",
          
          textVersion = 
          paste("Comoglio, F., Fracchia, L. & Rinaldi, M. (2013)", 
                "Bayesian inference from count data using discrete uniform priors",
-                "submitted" ) )
-
+                "PLoS ONE 8(10): e74388. doi:10.1371/journal.pone.0074388" ) )
