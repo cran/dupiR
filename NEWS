@@ -1,7 +1,10 @@
-CHANGES IN VERSION 1.2
-------------------------
+# v1.2.1
 
-    o Changed dilution factor cutoff determining the prior
-    o Updated citation info
-    o Added this News file   
-    o Compliant with R 3.1.2
+- Update documentation and prepare for resubmission to CRAN
+- Update maintainer email address
+    
+# v1.2
+
+- Change dilution factor cutoff determining the prior
+- Update citation info
+- Add News file
